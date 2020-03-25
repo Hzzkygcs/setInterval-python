@@ -1,16 +1,32 @@
 import threading
 
+class AlreadyRunning(Exception):
+    pass
 class setInterval():
-    def __init__(this,func, sec,args=[]):
-        this.running=True       
+    def __init__(this,func=None, sec=None,args=[]):
+        this.running=False       
         this.func=func                     #the function to be run
         this.sec=sec                          #interval in second
         this.Return=None               #The returned data
         this.args=args
         this.runOnce=None           #asociated with run_once() method
         this.runOnceArgs=None   #asociated with run_once() method
-        this.TIMER=threading.Timer(this.sec, this.loop)
-        this.TIMER.start()
+        if (func!=None and sec!=None):
+            this.running=True
+            if (not callable(func)):
+                raise TypeError("non-callable object is given")
+            if (type(sec)!=type(1) and type(sec)!=type(0.1)):
+                raise TypeError("A non-numeric object is given")
+            this.TIMER=threading.Timer(this.sec, this.loop)
+            this.TIMER.start()
+
+    def start(this):
+        if (not this.running):
+            this.running=True
+            this.TIMER=threading.Timer(this.sec, this.loop)
+            this.TIMER.start()
+        else:
+            raise AlreadyRunning("Tried to run an already run interval")
         
     def stop(this):
         this.running=False
@@ -19,23 +35,29 @@ class setInterval():
         if (this.running):
             this.TIMER=threading.Timer(this.sec, this.loop)
             this.TIMER.start()
-            function=this.func
+            function_=this.func
             if (this.runOnce!=None): #someone has run the run_once
-                runOnce, this.runOnce = this.runOnce, None
+                runOnce,this.runOnce=this.runOnce,None
                 result=runOnce( *(this.runOnceArgs)  )
                 this.runOnceArgs=None
                 if ( result ==False ): #if and only if the result is False. not accept "None" nor zero.
                     return ; #cancel the interval right now
-            this.Return=function(*this.args)
+            this.Return=function_(*this.args)
             
     def change_interval(this,sec):
+        if (type(sec)!=type(1) and type(sec)!=type(0.1)):
+            raise TypeError("A non-numeric object is given")
         this.TIMER.cancel(); this.sec=sec
         this.TIMER=threading.Timer(this.sec, this.loop); this.TIMER.start()
         
     def change_next_interval(this,sec):
+        if (type(sec)!=type(1) and type(sec)!=type(0.1)):
+            raise TypeError("A non-numeric object is given")
         this.sec=sec
         
     def change_func(this,func,args=[]):
+        if (not callable(func)):
+            raise TypeError("non-callable object is given")
         this.func=func
         this.args=args
         
