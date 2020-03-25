@@ -19,13 +19,14 @@ class setInterval():
         if (this.running):
             this.TIMER=threading.Timer(this.sec, this.loop)
             this.TIMER.start()
+            function=this.func
             if (this.runOnce!=None): #someone has run the run_once
-                runOnce,this.runOnce=this.runOnce,None
+                runOnce, this.runOnce = this.runOnce, None
                 result=runOnce( *(this.runOnceArgs)  )
                 this.runOnceArgs=None
                 if ( result ==False ): #if and only if the result is False. not accept "None" nor zero.
                     return ; #cancel the interval right now
-            this.Return=this.func(*this.args)
+            this.Return=function(*this.args)
             
     def change_interval(this,sec):
         this.TIMER.cancel(); this.sec=sec
