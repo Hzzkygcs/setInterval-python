@@ -2,6 +2,8 @@ import threading
 
 class AlreadyRunning(Exception):
     pass
+class IntervalNotValid(Exception):
+    pass
 class setInterval():
     def __init__(this,func=None, sec=None,args=[]):
         this.running=False       
@@ -22,6 +24,8 @@ class setInterval():
 
     def start(this):
         if (not this.running):
+            if (not this.isValid()):
+                raise IntervalNotValid("The function and/or the interval hasn't provided or invalid.")
             this.running=True
             this.TIMER=threading.Timer(this.sec, this.loop)
             this.TIMER.start()
@@ -30,7 +34,14 @@ class setInterval():
         
     def stop(this):
         this.running=False
-        
+
+    def isValid(this):
+        if (not callable(this.func)):
+            return False
+        if (type(this.sec)!=type(1) and type(this.sec)!=type(0.1)):
+            return False
+        return True
+    
     def loop(this):
         if (this.running):
             this.TIMER=threading.Timer(this.sec, this.loop)
@@ -47,8 +58,11 @@ class setInterval():
     def change_interval(this,sec):
         if (type(sec)!=type(1) and type(sec)!=type(0.1)):
             raise TypeError("A non-numeric object is given")
-        this.TIMER.cancel(); this.sec=sec
-        this.TIMER=threading.Timer(this.sec, this.loop); this.TIMER.start()
+        if (this.running): #prevent error when providing interval to a blueprint
+            this.TIMER.cancel()
+        this.sec=sec
+        if (this.running): #prevent error when providing interval to a blueprint if the function hasn't provided yet
+            this.TIMER=threading.Timer(this.sec, this.loop); this.TIMER.start()
         
     def change_next_interval(this,sec):
         if (type(sec)!=type(1) and type(sec)!=type(0.1)):
