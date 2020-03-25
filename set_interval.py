@@ -46,14 +46,14 @@ class setInterval():
         if (this.running):
             this.TIMER=threading.Timer(this.sec, this.loop)
             this.TIMER.start()
-            function_=this.func
-            if (this.runOnce!=None): #someone has run the run_once
+            function_,Args_=this.func,this.args
+            if (this.runOnce!=None): #someone has provide the run_once
                 runOnce,this.runOnce=this.runOnce,None
                 result=runOnce( *(this.runOnceArgs)  )
                 this.runOnceArgs=None
-                if ( result ==False ): #if and only if the result is False. not accept "None" nor zero.
+                if ( result == False ): #if and only if the result is False. not accept "None" nor zero.
                     return ; #cancel the interval right now
-            this.Return=function_(*this.args)
+            this.Return=function_(*Args_)
             
     def change_interval(this,sec):
         if (type(sec)!=type(1) and type(sec)!=type(0.1)):
