@@ -7,11 +7,11 @@ class IntervalNotValid(Exception):
 class setInterval():
     def __init__(this,func=None, sec=None,args=[]):
         this.running=False       
-        this.func=func                     #the function to be run
-        this.sec=sec                          #interval in second
-        this.Return=None               #The returned data
+        this.func=func          #the function to be run
+        this.sec=sec            #interval in second
+        this.Return=None        #The returned data
         this.args=args
-        this.runOnce=None           #asociated with run_once() method
+        this.runOnce=None       #asociated with run_once() method
         this.runOnceArgs=None   #asociated with run_once() method
         if (func!=None and sec!=None):
             this.running=True
