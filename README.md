@@ -62,7 +62,7 @@ i1.change_interval(2)
 i2.change_next_interval(3)
 
 #stop those intervals after 10 seconds of execution time
-time.sleep(10)
+sleep(10)
 i1.stop(); i2.stop() 
 ```
 
