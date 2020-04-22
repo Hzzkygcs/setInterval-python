@@ -161,7 +161,7 @@ Here's the example to get the returned object and to use shared memory trick:
 import time
 
 def f(sharedMemory):
-	sharedMemory.shared+=1
+	sharedMemory.shared += 1
 	print(sharedMemory.shared)
 	return f"returned {sharedMemory.shared}"
 
@@ -171,7 +171,7 @@ i = setInterval()
 i.shared=0
 
 i.change_interval(2)
-i.change_func(f, [ i ] )
+i.change_func(f, [i])
 
 i.start()
 
@@ -194,7 +194,7 @@ In order to check whether a blueprint is ready to be run or not, you can call an
 ## Run once
 To run a function only once in the next interval, you can use `run_once()` method. The parameter is as follows:
 
-```run_once( function [, Arguments =[]  ])```
+```run_once( function, Arguments=[])```
 
 The `function` is the one-time-run-function. It is the function that you want it to be run only once in the next interval. This function is run before the scheduled interval function.  If the function return `False` (and not `0` nor `None`), the next interval scheduled at that time will be cancelled. But you **don't have to** return `True` to keep the scheduled function running.
 
