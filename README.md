@@ -212,12 +212,12 @@ def b(c):
 	print(f'hello {c}!')
 
 
-def runOnceFunc(this,ChangeToBe):
-	this.change_func(ChangeToBe,["world"])
+def runOnceFunc(this, ChangeToBe):
+	this.change_func(ChangeToBe, ["world"])
 
 
 this = setInterval(a,4)
-this.run_once(runOnceFunc,[this, b]) #change to function b
+this.run_once(runOnceFunc, [this, b]) #change to function b
 
 # output:
 # hello a!
@@ -235,8 +235,8 @@ def timer():
 	print("one second has passed")
 
 
-a = setInterval(print,2.5,["Hello World!"])
-b = setInterval(timer,1) 
+a = setInterval(print, 2.5, ["Hello World!"])
+b = setInterval(timer, 1) 
 
 
 time.sleep(4)
