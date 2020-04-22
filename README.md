@@ -28,6 +28,31 @@ Anyway, you can also initiate a blueprint of the interval without run it immedia
 ```obj=setInterval()```
 You can utilize blueprints to do the shared-variable trick. Please note that blueprint interval **won't be executed** until you explicitly start it using `start()` method
 
+However, if you find yourself need to not immediately start the interval, you can set the keyword `autostart=False` in the parameter, like this:
+```import time
+
+count = 0
+
+def interval(self, name="world"):
+  global count
+  
+  print(f"Hello {name}!")
+  count += 1
+  if (count >= 3):  # clear interval right in the function
+      self.stop()
+
+# function named interval will be called every two seconds
+# output: "Hello world!"
+interval1 = setInterval(interval, 2, autostart=False) 
+interval1.change_argument([interval1])
+
+time.sleep(3)
+interval1.start()
+
+```
+this is important if you need to cancel the interval right in the interval function.
+
+
 ## Stop / Clear interval
 To clear the interval, you just need to call `.stop()` from the object of setInterval. This method will immediately stop the interval. It is allowed to stop a stopped interval.
 
@@ -99,7 +124,33 @@ i.stop()
 # b
 ```
 
+and if you need to leave the argument unchanged, you can pass None to the second parameter.
+
 Please note that it'll cost too much to make the  `change_next_func()` version of this method, where there'll no many people will need this feature. So for the substitute, I provide the change_next_func trick by using the `run_once()` method.
+
+## Change Argument
+
+if you need to change the argument without change the function itself, you can use `.change_argument(newArgument)`. For example:
+```import time
+
+def interval(name="world"):
+  print(f"Hello {name}!")
+
+interval1 = setInterval(interval, 2, autostart=False) 
+interval1.change_argument(["Jane"])
+interval1.start()
+
+time.sleep(5)
+interval1.change_argument(["Rudy"])
+
+# output:
+# Hello Jane!
+# Hello Jane!
+# Hello Rudy!
+# Hello Rudy!
+# Hello Rudy!
+# ...
+```
 
 ## Get the return
 To get the return of the interval, you need to call `.get_return()` from the object of setInterval. This method will give you the returned data from the latest call. Please remember that `.get_return()` will give you `None` if the function hasn't ever called, or if your function gives no return. 

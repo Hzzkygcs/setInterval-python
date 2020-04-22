@@ -10,7 +10,7 @@ class IntervalNotValid(Exception):
 
 
 class setInterval():
-    def __init__(this, func=None, sec=None, args=[]):
+    def __init__(this, func=None, sec=None, args=[], autostart=True):
         this.running = False
         this.func = func  # the function to be run
         this.sec = sec            # interval in second
@@ -19,7 +19,7 @@ class setInterval():
         this.runOnce = None  # asociated with run_once() method
         this.runOnceArgs = None   # asociated with run_once() method
 
-        if (func is not None and sec is not None):
+        if (func is not None) and (sec is not None) and autostart:
             this.running = True
 
             if (not callable(func)):
@@ -56,7 +56,6 @@ class setInterval():
         return True
 
     def loop(this):
-
         if (this.running):
             this.TIMER = threading.Timer(this.sec, this.loop)
             this.TIMER.start()
@@ -106,7 +105,12 @@ class setInterval():
             raise TypeError("non-callable object is given")
 
         this.func = func
-        this.args = args
+
+        if args is not None:
+            this.args = args
+
+    def change_argument(this, newArgument=[]):
+        this.args = newArgument
 
     def run_once(this, func, args=[]):
         this.runOnce = func
