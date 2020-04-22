@@ -6,7 +6,7 @@ This class will help you do that easily and dynamically on python. Open all of t
 Declaring 
 ---------
 To declare an interval function, you just need to call the setInterval class. The parameter is as follows:
-```setInterval(Function,Interval[, Arguments=[]  ])``` 
+```setInterval(Function, Interval, Arguments=[])``` 
 The `Interval` is in second, by using number data type.
 The `Arguments` is the arguments you need to pass to the function in an array.
 
@@ -16,11 +16,11 @@ def interval(name="world"):
   print(f"Hello {name}!")
 
 # function named interval will be called every two seconds
-#output: "Hello world!"
+# output: "Hello world!"
 interval1 = setInterval(interval, 2) 
 
 # function named interval will be called every 1.5 seconds
-#output: "Hello Jane!"
+# output: "Hello Jane!"
 interval2 = setInterval(interval, 1.5, ["Jane"]) 
 ```
 
@@ -48,22 +48,23 @@ Here's the difference example:
 ```Python
 from time import sleep
 
-i1 = setInterval(print,5,["hello"])
-i2 = setInterval(print,5,["world"])
+i1 = setInterval(print, 5, ["hello"])
+i2 = setInterval(print, 5, ["world"])
 
 sleep(1) 
 
-#the first 'hello' will be printed after 3 seconds of execution time (sleep:1 second + new interval : 2 second)
-#the second 'hello' will be printed after 5 seconds of execution time
+# the first 'hello' will be printed after 3 seconds of execution time (sleep:1 second + new interval : 2 second)
+# the second 'hello' will be printed after 5 seconds of execution time
 i1.change_interval(2) 
 
-#the first 'world' will be printed after 5 seconds (old interval: 5 seconds)
-#the second 'world' will be printed after 8 seconds (old interval: 5 seconds + new interval: 3 seconds)
+# the first 'world' will be printed after 5 seconds (old interval: 5 seconds)
+# the second 'world' will be printed after 8 seconds (old interval: 5 seconds + new interval: 3 seconds)
 i2.change_next_interval(3)
 
-#stop those intervals after 10 seconds of execution time
+# stop those intervals after 10 seconds of execution time
 sleep(10)
-i1.stop(); i2.stop() 
+i1.stop()
+i2.stop() 
 ```
 
 ## Change the function
@@ -75,15 +76,21 @@ Example:
 ```Python
 import time
 
+
 def a():
 	print('a')
+	
+	
 def b():
 	print('b')
 
+
 i = setInterval(a, 3)
 time.sleep(4)
+
 i.change_func(b)
 time.sleep(7)
+
 i.stop()
 
 # output:
@@ -106,16 +113,23 @@ def f(sharedMemory):
 	sharedMemory.shared+=1
 	print(sharedMemory.shared)
 	return f"returned {sharedMemory.shared}"
+
+
 i = setInterval()
+
 i.shared=0
+
 i.change_interval(2)
 i.change_func(f, [ i ] )
+
 i.start()
 
 time.sleep(5) 
-#sleep until the f has been called twice, 
-#get the returned object of the latest call (the second call).
+
+# sleep until the f has been called twice, 
+# get the returned object of the latest call (the second call).
 print( i.get_return() )
+
 i.stop()
 ```
 
@@ -141,14 +155,19 @@ Example 1, the change_next_func trick:
 ```Python
 def a():
 	print('hello a!')
+
+
 def b(c):
 	print(f'hello {c}!')
-	
+
+
 def runOnceFunc(this,ChangeToBe):
 	this.change_func(ChangeToBe,["world"])
 
-this=setInterval(a,4)
+
+this = setInterval(a,4)
 this.run_once(runOnceFunc,[this, b]) #change to function b
+
 # output:
 # hello a!
 # hello world!
@@ -160,11 +179,14 @@ Example 2, skip the next 1 interval trick:
 ```Python 
 import time
 
+
 def timer():
 	print("one second has passed")
-	
+
+
 a = setInterval(print,2.5,["Hello World!"])
 b = setInterval(timer,1) 
+
 
 time.sleep(4)
 a.run_once(lambda: False) #skip the next interval once.
